@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="neuroph-core-2.9">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Dropbox/Progamming/Java libraries/neuroph-2.9/neuroph-core-2.9.jar!/" />
+      <root url="jar://$USER_HOME$/Dropbox/Progamming/Java libraries/neuroph-2.9/libs/slf4j-api-1.7.5.jar!/" />
+      <root url="jar://$USER_HOME$/Dropbox/Progamming/Java libraries/neuroph-2.9/libs/slf4j-nop-1.7.6.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
