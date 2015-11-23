@@ -80,7 +80,15 @@ public class DriverTraining {
             }
             trainingSet.addRow(inputDoubles, outputDoubles);
         }
-        System.out.println(inputlist.size() +" "+outputlist.size());
+
+
+        System.out.println(inputlist.size() +" "+outputlist.size()+" ");
+
+        trainingSet = normalizeDataSet(trainingSet);
+//
+//        if(true){
+//            System.exit(1);
+//        }
 
 // create multi layer perceptron
         MultiLayerPerceptron myMlPerceptron = new MultiLayerPerceptron(TransferFunctionType.TANH, 28, 15, 6);
@@ -115,5 +123,66 @@ public class DriverTraining {
             System.out.println(" Output: " + Arrays.toString(networkOutput) );
         }
 
+    }
+    
+    private static DataSet normalizeDataSet(DataSet dataSet){
+        List<DataSetRow> rows = dataSet.getRows();
+
+        Iterator<DataSetRow> rowIterator = rows.iterator();
+        DataSetRow row;
+        double[] inputMins = new double[dataSet.getInputSize()];
+        double[] inputMax = new double[dataSet.getInputSize()];
+        double[] outputMins = new double[dataSet.getOutputSize()];
+        double[] outputMax = new double[dataSet.getOutputSize()];
+        boolean first = true;
+
+        rows = dataSet.getRows();
+
+        rowIterator = rows.iterator();
+
+        while(rowIterator.hasNext()) {
+            row = rowIterator.next();
+            double[] input = row.getInput();
+            System.out.println(row.toCSV());
+        }
+
+        while(rowIterator.hasNext()){
+            row = rowIterator.next();
+            double[] input = row.getInput();
+            double[] output = row.getDesiredOutput();
+            for(int i = 0; i<input.length; i++){
+                if(input[i] < inputMins[i] || first ){
+                    inputMins[i] = input[i];
+                }
+                if(input[i] > inputMax[i] || first ){
+                    inputMins[i] = input[i];
+                }
+            }
+            for(int i = 0; i<output.length; i++){
+                if(output[i] < outputMins[i] || first ){
+                    outputMins[i] = output[i];
+                }
+                if(output[i] > outputMax[i] || first ){
+                    outputMins[i] = output[i];
+                }
+            }
+            first = false;
+        }
+        rowIterator = rows.iterator();
+        while(rowIterator.hasNext()){
+            row = rowIterator.next();
+            double[] input = row.getInput();
+            double[] output = row.getDesiredOutput();
+            for(int i = 0; i < input.length; i++){
+                input[i]=(input[i]-inputMins[i])/(inputMax[i] - inputMins[i]);
+            }
+            for(int i = 0; i < output.length; i++){
+                output[i]=(output[i]-outputMins[i])/(outputMax[i] - outputMins[i]);
+            }
+        }
+
+
+
+        return dataSet;
     }
 }
