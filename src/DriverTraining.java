@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Erik on 11/13/2015.
@@ -19,21 +20,26 @@ public class DriverTraining {
     public static void main(String[] args) {
 
         // open data
-        DataSet trainingSet = new DataSet(28, 6);
+        DataSet trainingSet = new DataSet(7, 5);
         List<String> inputlist = new ArrayList<String>();
         List<String> outputlist = new ArrayList<String>();
         File input = new File("C:\\Users\\Erik\\IdeaProjects\\CI2015Car\\classes\\input.txt");
         File output = new File("C:\\Users\\Erik\\IdeaProjects\\CI2015Car\\classes\\output.txt");
         BufferedReader reader = null;
-        int maxEntries = 500;
+        int maxEntries = 700;
         try {
             reader = new BufferedReader(new FileReader(input));
             String text = null;
 
             int entries = 0;
             while ((text = reader.readLine()) != null && entries < maxEntries) {
-                inputlist.add(text);
-                entries++;
+                Random rand = new Random();
+
+                // nextInt is normally exclusive of the top value,
+                // so add 1 to make it inclusive
+                double randomNum = rand.nextDouble();
+                    inputlist.add(text);
+                    entries++;
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -95,10 +101,14 @@ public class DriverTraining {
 //        }
 
 // create multi layer perceptron
-        MultiLayerPerceptron myMlPerceptron = new MultiLayerPerceptron(TransferFunctionType.TANH, 28, 30, 15, 30, 6);
+        MultiLayerPerceptron myMlPerceptron = new MultiLayerPerceptron(TransferFunctionType.LINEAR, 7,10,10,10,10, 5);
         System.out.println("training...");
 // learn the training set
+        long startTime = System.currentTimeMillis();
         myMlPerceptron.learn(trainingSet);
+        long stopTime = System.currentTimeMillis();
+        long elapsedTime = stopTime - startTime;
+        System.out.println(elapsedTime);
         System.out.println("training done");
 
 // test perceptron
@@ -106,7 +116,7 @@ public class DriverTraining {
         testNeuralNetwork(myMlPerceptron, trainingSet);
 
 // save trained neural network
-        myMlPerceptron.save("myMlPerceptron.nnet");
+        myMlPerceptron.save("fullRace.nnet");
 //
 //// load saved neural network
 //        NeuralNetwork loadedMlPerceptron = NeuralNetwork.createFromFile("myMlPerceptron.nnet");
